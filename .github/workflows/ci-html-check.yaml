@@ -15,5 +15,5 @@ jobs:
 
       - name: Check if index.html exists
         run: test -f .github/workflows/index.html
-
+        echo "index.html exsits in the current directory"
 
