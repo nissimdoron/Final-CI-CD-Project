@@ -14,11 +14,11 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Check if index.html exists
-        run: test -f index.html
+        run: test -f .github/workflows/index.html
 
       - name: Simulate HTML validation (optional)
         run: |
-          if grep -q "<html>" index.html; then
+          if grep -q "<html>" .github/workflows/index.html; then
             echo "HTML looks valid"
           else
             echo "HTML file might be malformed"
