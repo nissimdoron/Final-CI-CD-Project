@@ -1,0 +1,39 @@
+name: CI - Matrix Build and Test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        nginx_version: [alpine, latest, 1.25]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Docker cache
+        uses: actions/cache@v4
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ matrix.nginx_version }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
+
+      - name: Build Docker image with NGINX ${{ matrix.nginx_version }}
+        run: |
+          docker build \
+            --build-arg NGINX_VERSION=${{ matrix.nginx_version }} \
+            -t html-site:${{ matrix.nginx_version }} .
+
+      - name: Test container
+        run: |
+          docker run -d -p 5050:80 --name test html-site:${{ matrix.nginx_version }}
+          sleep 1
+          curl -f http://localhost:5050
+          docker stop test
+

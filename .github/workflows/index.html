@@ -1,0 +1,264 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GameZone - Epic Gaming Gear 🎮</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Arial', sans-serif;
+    }
+
+    body {
+      background: #0a0a0a;
+      color: #fff;
+      overflow-x: hidden;
+    }
+
+    header {
+      background: linear-gradient(90deg, #1c1c1c, #2a2a2a);
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(0, 255, 255, 0.3);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    header h1 {
+      font-size: 2.5em;
+      color: #00ffcc;
+      text-shadow: 0 0 10px #00ffcc;
+      letter-spacing: 2px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      padding: 20px;
+    }
+
+    .product-card {
+      background: #1c1c1c;
+      border-radius: 10px;
+      overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s;
+      position: relative;
+      border: 2px solid #00ffcc;
+    }
+
+    .product-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+    }
+
+    .product-card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .product-info {
+      padding: 15px;
+      text-align: center;
+    }
+
+    .product-info h3 {
+      font-size: 1.5em;
+      color: #fff;
+      margin-bottom: 10px;
+    }
+
+    .product-info p {
+      color: #00ffcc;
+      font-size: 1.2em;
+      margin-bottom: 15px;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 12px 24px;
+      background: #00ffcc;
+      color: #0a0a0a;
+      text-decoration: none;
+      border-radius: 25px;
+      font-weight: bold;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      z-index: 1;
+      cursor: pointer;
+    }
+
+    .btn::before {
+      content: '🕹️';
+      position: absolute;
+      top: 50%;
+      left: -30px;
+      transform: translateY(-50%);
+      font-size: 1.5em;
+      opacity: 0;
+      transition: all 0.3s ease;
+    }
+
+    .btn:hover::before {
+      left: 10px;
+      opacity: 1;
+    }
+
+    .btn:hover {
+      background: #ff007a;
+      color: #fff;
+      box-shadow: 0 0 15px #ff007a;
+      transform: scale(1.05);
+    }
+
+    .btn::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.4),
+        transparent
+      );
+      transition: 0.5s;
+    }
+
+    .btn:hover::after {
+      left: 100%;
+    }
+
+    .glow {
+      animation: glow 1.5s infinite alternate;
+    }
+
+    @keyframes glow {
+      from {
+        text-shadow: 0 0 5px #00ffcc, 0 0 10px #00ffcc;
+      }
+      to {
+        text-shadow: 0 0 10px #00ffcc, 0 0 20px #ff007a;
+      }
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      background: #1c1c1c;
+      margin-top: 40px;
+      color: #00ffcc;
+    }
+
+    @media (max-width: 600px) {
+      .product-grid {
+        grid-template-columns: 1fr;
+      }
+
+      header h1 {
+        font-size: 1.8em;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1 class="glow">GameZone 🎮</h1>
+    <p>Your Ultimate Gaming Gear Store! 🚀</p>
+  </header>
+
+  <div class="container">
+    <div class="product-grid">
+      <div class="product-card">
+        <img src="https://via.placeholder.com/300x200?text=Gaming+Mouse" alt="Gaming Mouse">
+        <div class="product-info">
+          <h3>Pro Gaming Mouse 🖱️</h3>
+          <p>$49.99</p>
+          <a href="#" class="btn">Add to Cart 🛒</a>
+        </div>
+      </div>
+      <div class="product-card">
+        <img src="https://via.placeholder.com/300x200?text=RGB+Keyboard" alt="RGB Keyboard">
+        <div class="product-info">
+          <h3>RGB Mechanical Keyboard ⌨️</h3>
+          <p>$89.99</p>
+          <a href="#" class="btn">Add to Cart 🛒</a>
+        </div>
+      </div>
+      <div class="product-card">
+        <img src="https://via.placeholder.com/300x200?text=VR+Headset" alt="VR Headset">
+        <div class="product-info">
+          <h3>VR Headset 🌌</h3>
+          <p>$299.99</p>
+          <a href="#" class="btn">Add to Cart 🛒</a>
+        </div>
+      </div>
+      <div class="product-card">
+        <img src="https://via.placeholder.com/300x200?text=Gaming+Chair" alt="Gaming Chair">
+        <div class="product-info">
+          <h3>Ergonomic Gaming Chair 🪑</h3>
+          <p>$199.99</p>
+          <a href="#" class="btn">Add to Cart 🛒</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2025 GameZone - Level Up Your Gaming! 🎯</p>
+  </footer>
+</body>
+</html>

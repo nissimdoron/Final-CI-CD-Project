@@ -1,0 +1,27 @@
+name: CI - Check HTML Site
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test-html:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Check if index.html exists
+        run: test -f index.html
+
+      - name: Simulate HTML validation (optional)
+        run: |
+          if grep -q "<html>" index.html; then
+            echo "HTML looks valid"
+          else
+            echo "HTML file might be malformed"
+            exit 1
+          fi
+
