@@ -28,7 +28,7 @@ jobs:
         run: |
           docker build \
             --build-arg NGINX_VERSION=${{ matrix.nginx_version }} \
-            -t Gaming-ecm-site:${{ matrix.nginx_version }} .
+            -t gaming-ecm-site:${{ matrix.nginx_version }} .
 
       - name: Test container
         run: |
