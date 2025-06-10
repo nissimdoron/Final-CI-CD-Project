@@ -9,16 +9,17 @@ on:
 jobs:
   build-test:
     runs-on: ubuntu-latest
-    strategy:
     steps:
-     -name: Check current working directory and repo contents
-       run: |
-        echo "Current directory:"
-        pwd
-        echo "Contents:"
-        ls -la
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    -name: List all files in the repo
-      run: |
-       find . -type f
+      - name: Check current working directory and repo contents
+        run: |
+          echo "Current directory:"
+          pwd
+          echo "Contents:"
+          ls -la
 
+      - name: List all files in the repo
+        run: |
+          find . -type f
