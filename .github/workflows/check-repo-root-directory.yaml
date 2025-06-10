@@ -1,0 +1,11 @@
+- name: Check current working directory and repo contents
+  run: |
+    echo "Current directory:"
+    pwd
+    echo "Contents:"
+    ls -al
+
+- name: List all files in the repo
+  run: |
+    find . -type f
+
