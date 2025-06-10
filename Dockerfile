@@ -13,7 +13,7 @@ EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
 
 ARG APP_VERSION
-LABEL version="${APP_VERSION}"
+LABEL version="${NGINX_VERSION}"
 
 ARG NGINX_VERSION=latest
 FROM nginx:${NGINX_VERSION}
