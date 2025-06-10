@@ -1,11 +1,24 @@
-- name: Check current working directory and repo contents
-  run: |
-    echo "Current directory:"
-    pwd
-    echo "Contents:"
-    ls -al
+name: CI - Check current working directory and repo contents
 
-- name: List all files in the repo
-  run: |
-    find . -type f
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    strategy:
+    steps:
+     -name: Check current working directory and repo contents
+        run: |
+        echo "Current directory:"
+        pwd
+        echo "Contents:"
+        ls -la
+
+    -name: List all files in the repo
+      run: |
+       find . -type f
 
