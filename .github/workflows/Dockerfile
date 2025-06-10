@@ -1,4 +1,5 @@
-FROM nginx:alpine
+ARG NGINX_VERSION=latest
+FROM nginx:${NGINX_VERSION}
 
 # Remove default NGINX web files
 RUN rm -rf /usr/share/nginx/html/*
@@ -13,10 +14,8 @@ EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
 
 ARG APP_VERSION
-LABEL version="${APP_VERSION}" 
+LABEL version="${APP_VERSION}"
 
-ARG NGINX_VERSION=latest
-FROM nginx:${NGINX_VERSION}
 
 
 
