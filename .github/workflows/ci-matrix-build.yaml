@@ -12,6 +12,7 @@ jobs:
     strategy:
       matrix:
         nginx_version: [alpine, 1.25]
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -27,10 +28,9 @@ jobs:
       - name: Build Docker image with NGINX ${{ matrix.nginx_version }}
         run: |
           docker build \
-              --build-arg NGINX_VERSION=${{ matrix.nginx_version }} \
-              -t gaming-ecm-site:${{ matrix.nginx_version }} \
-              -f ./Dockerfile .
-
+            --build-arg NGINX_VERSION=${{ matrix.nginx_version }} \
+            -t gaming-ec-site:${{ matrix.nginx_version }} \
+            -f ./Dockerfile .
 
       - name: Test container
         run: |
