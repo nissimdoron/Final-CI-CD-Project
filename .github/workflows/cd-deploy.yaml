@@ -32,7 +32,7 @@ jobs:
 
       - name: Dry-run Check
         id: check
-        run: echo "Dry run: '${{ github.event.inputs.dry_run }}'"
+        run: echo Dry run: ${{ github.event.inputs.dry_run }}
 
       - name: Build and Tag Image
         if: github.event.inputs.dry_run != 'true'
