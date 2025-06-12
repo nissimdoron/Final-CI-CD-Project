@@ -31,8 +31,9 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Dry-run Check
-        id: check
-        run: echo Dry run: ${{ github.event.inputs.dry_run }}
+          if: github.event_name == 'workflow_dispatch'
+         run: echo "Dry run: ${{ github.event.inputs.dry_run }}"
+
 
       - name: Build and Tag Image
         if: github.event.inputs.dry_run != 'true'
