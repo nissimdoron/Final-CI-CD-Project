@@ -26,7 +26,8 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Show Dry Run Value
-        run: echo "Dry run: $DRY_RUN"
+         run: echo "Dry run: ${{ env.DRY_RUN }}"
+
 
       - name: Build and Tag Image
         if: env.DRY_RUN != 'true'
