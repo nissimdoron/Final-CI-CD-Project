@@ -23,13 +23,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Set DRY_RUN variable so future steps can use it
-      - name: Set dry run flag
+      - name: Set DRY_RUN env variable
         run: echo "DRY_RUN=${{ github.event.inputs.dry_run }}" >> $GITHUB_ENV
 
-      # Confirm dry run value — only works AFTER it's set
       - name: Show dry run setting
-        run: echo "Dry run is: $DRY_RUN"
+        run: echo "Dry run is: ${{ env.DRY_RUN }}"
 
       - name: Skip deployment if dry run
         if: env.DRY_RUN == 'true'
