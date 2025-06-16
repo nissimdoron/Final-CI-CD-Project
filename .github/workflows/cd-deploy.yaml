@@ -58,6 +58,4 @@ jobs:
             -d "{\"text\": \"Deployed to ${{ github.event.inputs.environment }} with tag: ${{ env.IMAGE_TAG }}\"}" \
             ${{ secrets.DEPLOYMENT_WEBHOOK }}
 
-      - name: Simulated Deploy Output
-        if: github.event.inputs.dry_run == 'true'
-        run: echo "DRY RUN: Deployment simulated for ${{ github.event.inputs.environment }}"
+     
