@@ -1,0 +1,31 @@
+name: CD - Dry Run Example
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Simulate deployment"
+        required: false
+        default: "false"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set dry run environment variable
+        run: echo "DRY_RUN=${{ github.event.inputs.dry_run }}" >> $GITHUB_ENV
+
+      - name: Show dry run setting
+        run: echo "Dry run is: ${{ env.DRY_RUN }}"
+
+      - name: Real deployment (only if not dry run)
+        if: env.DRY_RUN != 'true'
+        run: echo "🚀 Deploying for real..."
+
+      - name: Simulated deployment
+        if: env.DRY_RUN == 'true'
+        run: echo "🧪 This is a dry run – no real deployment."
+
