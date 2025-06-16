@@ -32,8 +32,8 @@ jobs:
 
 
       - name: Build and Tag Image
-          if: github.event.inputs.dry_run != 'true'
-         run: | 
+        if: github.event.inputs.dry_run != 'true'
+        run: | 
            IMAGE_TAG=${{ github.event.inputs.environment }}-${GITHUB_SHA::7}
            docker build -t ${{ secrets.DOCKER_USERNAME }}/gaming-ec-site:$IMAGE_TAG .
            echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
