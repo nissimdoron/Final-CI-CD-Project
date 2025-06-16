@@ -26,9 +26,6 @@ jobs:
       - name: Set DRY_RUN env variable
         run: echo "DRY_RUN=${{ github.event.inputs.dry_run }}" >> $GITHUB_ENV
 
-      - name: Show dry run setting
-        run: echo "Dry run is: ${{ env.DRY_RUN }}"
-
       - name: Skip deployment if dry run
         if: env.DRY_RUN == 'true'
         run: echo "🚫 Skipping deployment (Dry run mode)"
