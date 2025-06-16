@@ -1,4 +1,4 @@
-name: CD - Deploy HTML Site
+name: CD - Deploy Dry Run
 
 on:
   push:
