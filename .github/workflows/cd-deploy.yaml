@@ -49,13 +49,13 @@ jobs:
         run: docker push ${{ secrets.DOCKER_USERNAME }}/gamingecsite:${{ env.IMAGE_TAG }}
 
       - name: Create GitHub release
-        if: github.event.inputs.dry_run != 'true'
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: Gaming-ECM-Site-${{ github.run_number }}
-          name: Release Gaming-ECM-Site-${{ github.run_number }}
+        tag_name: Gaming-ECM-Site-${{ github.run_number }}
+        name: Release Gaming-ECM-Site-${{ github.run_number }}
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
+
 
       - name: Notify Webhook
         if: github.event.inputs.dry_run != 'true'
