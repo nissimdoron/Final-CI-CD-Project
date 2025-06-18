@@ -51,7 +51,7 @@ jobs:
       - name: Run container for testing on localhost:5050
         if: github.event.inputs.dry_run != 'true'
         run: |
-          docker run -d -p 5050:80 --name deployed-container ${{ secrets.DOCKER_USERNAME }}/gaming-ec-site:${{ env.IMAGE_TAG }}
+          docker run -d -p 5050:80 --name deployed-container ${{ secrets.DOCKER_USERNAME }}/gamingecsite:${{ env.IMAGE_TAG }}
           sleep 5
           curl -f http://localhost:5050
 
