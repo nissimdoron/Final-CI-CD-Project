@@ -52,7 +52,9 @@ jobs:
         if: github.event.inputs.dry_run != 'true'
         run: |
           docker run -d -p 5050:80 --name deployed-container ${{ secrets.DOCKER_USERNAME }}/gamingecsite:${{ env.IMAGE_TAG }}
-          sleep 1
+          
+	  sleep 1
+	 
 	  curl -f http://localhost:5050
 
 
