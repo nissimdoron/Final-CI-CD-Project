@@ -1,0 +1,41 @@
+name: CD - Deploy with Dry Run Support
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Target environment (staging or production)"
+        required: true
+        default: "staging"
+      dry_run:
+        description: "Simulate deployment (true or false)"
+        required: true
+        default: "true"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Print environment
+        run: echo "Deploying to environment: ${{ github.event.inputs.environment }}"
+
+      - name: Dry run check
+        run: echo "Dry run mode: ${{ github.event.inputs.dry_run }}"
+
+      - name: Build Docker image
+        if: github.event.inputs.dry_run != 'true'
+        run: |
+          echo "Building Docker image..."
+          docker build -t my-app:${{ github.sha }} .
+
+      - name: Push Docker image
+        if: github.event.inputs.dry_run != 'true'
+        run: |
+          echo "Pushing Docker image..."
+          docker push my-app:${{ github.sha }}
+
+      - name: Simulated deployment
+        if: github.event.inputs.dry_run == 'true'
+        run: echo "🧪 DRY RUN: No Docker image was built or pushed."
+
