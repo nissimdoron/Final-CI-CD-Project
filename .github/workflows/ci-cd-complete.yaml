@@ -39,7 +39,7 @@ jobs:
       name: ${{ github.event.inputs.environment }}
 
 
-  steps:
+  
       - name: Build Docker image with NGINX ${{ matrix.nginx_version }}
         run: |
           docker build \
