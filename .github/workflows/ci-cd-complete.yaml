@@ -43,13 +43,13 @@ jobs:
         run: |
           docker build \
             --build-arg NGINX_VERSION=${{ matrix.nginx_version }} \
-            -t gaming-ec-site:${{ matrix.nginx_version }} \
+            -t gamingecsite:${{ matrix.nginx_version }} \
             -f ./Dockerfile .
 
 
       - name: Test container
         run: |
-          docker run -d -p 5050:80 --name test gaming-ec-site:${{ matrix.nginx_version }}
+          docker run -d -p 5050:80 --name test gamingecsite:${{ matrix.nginx_version }}
           sleep 1
           curl -f http://localhost:5050
           docker stop test
