@@ -1,8 +1,18 @@
-name: CI - Matrix Build and Test
+name: CI - CD -  Matrix Build and Test with Deployment
 
 on:
   push:
     branches: [main]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Target environment (staging or production)"
+        required: true
+        default: "staging"
+      dry_run:
+        description: "Simulate deployment (true/false)"
+        required: false
+        default: "false"
   pull_request:
     branches: [main]
 
@@ -12,10 +22,20 @@ jobs:
     strategy:
       matrix:
         nginx_version: [alpine, 1.25]
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ github.event.inputs.environment }}
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
 
       - name: Build Docker image with NGINX ${{ matrix.nginx_version }}
@@ -32,37 +52,6 @@ jobs:
           curl -f http://localhost:5050
           docker stop test
 
-name: CD - Deploy HTML Site
-
-on:
-  push:
-    branches: [main]
-  workflow_dispatch:
-    inputs:
-      environment:
-        description: "Target environment (staging or production)"
-        required: true
-        default: "staging"
-      dry_run:
-        description: "Simulate deployment (true/false)"
-        required: false
-        default: "false"
-
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    environment:
-      name: ${{ github.event.inputs.environment }}
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
 
 
       - name: Build and Tag Image
@@ -88,6 +77,4 @@ jobs:
         run: |
           curl -X POST -H "Content-Type: application/json" \
             -d "{\"text\": \"Deployed to ${{ github.event.inputs.environment }} with tag: ${{ env.IMAGE_TAG }}\"}" \
-            ${{ secrets.DEPLOYMENT_WEBHOOK }}
-
-     
+            ${{ secrets.DEPLOYMENT_WEBHOOK }
