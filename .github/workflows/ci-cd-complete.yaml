@@ -15,10 +15,6 @@ on:
         description: "Simulate deployment (true/false)"
         required: false
         default: "false"
-      deploy:
-        runs-on: ubuntu-latest
-        environment:
-          name: ${{ github.event.inputs.environment }}
 
 jobs:
   build-test:
@@ -37,7 +33,13 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
+   deploy:
+     runs-on: ubuntu-latest
+     environment:
+      name: ${{ github.event.inputs.environment }}
 
+
+    steps:
       - name: Build Docker image with NGINX ${{ matrix.nginx_version }}
         run: |
           docker build \
