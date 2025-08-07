@@ -3,6 +3,8 @@ name: CI - CD -  Matrix Build and Test with Deployment
 on:
   push:
     branches: [main]
+   pull_request:
+    branches: [main]
   workflow_dispatch:
     inputs:
       environment:
@@ -13,8 +15,10 @@ on:
         description: "Simulate deployment (true/false)"
         required: false
         default: "false"
-  pull_request:
-    branches: [main]
+      deploy:
+        runs-on: ubuntu-latest
+        environment:
+          name: ${{ github.event.inputs.environment }}
 
 jobs:
   build-test:
@@ -22,10 +26,6 @@ jobs:
     strategy:
       matrix:
         nginx_version: [alpine, 1.25]
-  deploy:
-    runs-on: ubuntu-latest
-    environment:
-      name: ${{ github.event.inputs.environment }}
 
     steps:
       - name: Checkout code
