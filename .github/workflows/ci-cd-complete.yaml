@@ -1,4 +1,4 @@
-name: CI - CD -  Matrix Build and Test with Deployment
+name:CI-CD - Matrix Build and Test with Deployment
 
 on:
   push:
@@ -17,7 +17,7 @@ on:
         default: "false"
 
 jobs:
-  Build-Test:
+  Build-Test-Deploy:
     runs-on: ubuntu-latest
     environment:
       name: ${{ github.event.inputs.environment }} 
@@ -28,16 +28,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3  
-
-      - name: Set DRY_RUN env variable
-        run: echo "DRY_RUN=${{ github.event.inputs.dry_run }}" >> $GITHUB_ENV
-
-      - name: Skip deployment if dry run
-        if: env.DRY_RUN == 'true'
-        run: echo "Skipping deployment (Dry run mode)"
-
-      - name: Proceed with deployment
-        if: env.DRY_RUN != 'true'
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
