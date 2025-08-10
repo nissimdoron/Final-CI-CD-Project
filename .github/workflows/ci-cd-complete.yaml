@@ -67,8 +67,13 @@ jobs:
         if: github.event.inputs.dry_run != 'true'
         run: docker push ${{ secrets.DOCKER_USERNAME }}/gamingecsite:${{ env.IMAGE_TAG }}
 
+      - name: Create Git Tag
+          git config user.name "nissimdoron"
+          git config user.email "nisko39@gmail.com"
+          git tag ${{ env.IMAGE_TAG }}
+          git push origin ${{ env.IMAGE_TAG }}
+
       - name: Create GitHub Release
-        if: github.event.inputs.dry_run != 'true'
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ env.IMAGE_TAG }}
