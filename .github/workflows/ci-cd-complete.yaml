@@ -85,6 +85,7 @@ jobs:
         run: |
           if [ -f package.json ]; then
             npm test
+ 	  fi
 
       - name: Create Git Tag
         if: github.event.inputs.dry_run != 'true'
