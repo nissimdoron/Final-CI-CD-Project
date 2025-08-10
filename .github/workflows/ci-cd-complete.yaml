@@ -1,10 +1,10 @@
-name: CI - CD -  Matrix Build and Test with Deployment
+name: CI-CD - Matrix Build and Test with Deployment
 
 on:
   push:
-    branches: [main]
-  pull_request:
     branches: [sub-main]
+  pull_request:
+    branches: [main]
   workflow_dispatch:
     inputs:
       environment:
@@ -17,7 +17,7 @@ on:
         default: "false"
 
 jobs:
-  Build-Test:
+  Build-Test-Deploy:
     runs-on: ubuntu-latest
     environment:
       name: ${{ github.event.inputs.environment }} 
@@ -27,7 +27,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v3  
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
@@ -48,7 +48,7 @@ jobs:
           docker run -d -p 5050:80 --name test gamingecsite:${{ matrix.nginx_version }}
           sleep 1
           curl -f http://localhost:5050
-          docker stop test 
+          docker stop test
 
       - name: Build and Tag Image
         if: github.event.inputs.dry_run != 'true'
