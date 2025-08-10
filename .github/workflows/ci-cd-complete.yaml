@@ -71,6 +71,23 @@ jobs:
       - name: Push Image
         if: github.event.inputs.dry_run != 'true'
         run: docker push ${{ secrets.DOCKER_USERNAME }}/gamingecsite:${{ env.IMAGE_TAG }}
+     
+
+      - name: Install dependencies (if using npm)
+        run: |
+          if [ -f package.json ]; then
+            npm ci
+          else
+            echo "No dependencies to install"
+          fi
+
+      - name: Run tests (if any)
+        run: |
+          if [ -f package.json ]; then
+            npm test
+          else
+            echo "No tests to run"
+          fi 
 
       - name: Create Git Tag
         if: github.event.inputs.dry_run != 'true'
