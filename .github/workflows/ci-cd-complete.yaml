@@ -73,7 +73,7 @@ jobs:
         run: docker push ${{ secrets.DOCKER_USERNAME }}/gamingecsite:${{ env.IMAGE_TAG }}
      
       
-      - name: Install dependencies 
+      - name: Install dependencies
         run: |
           if [ -f package.json ]; then
             npm ci
@@ -81,11 +81,11 @@ jobs:
             echo "No dependencies to install"
           fi
 
-      - name: Run npm tests 
+      - name: Run npm tests
         run: |
           if [ -f package.json ]; then
             npm test
- 	  fi
+          fi
 
       - name: Create Git Tag
         if: github.event.inputs.dry_run != 'true'
