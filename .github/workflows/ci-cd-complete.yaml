@@ -67,6 +67,15 @@ jobs:
         if: github.event.inputs.dry_run != 'true'
         run: docker push ${{ secrets.DOCKER_USERNAME }}/gamingecsite:${{ env.IMAGE_TAG }}
 
+      - name: Create GitHub Release
+        if: github.event.inputs.dry_run != 'true'
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ env.IMAGE_TAG }}
+          name: "Release ${{ env.IMAGE_TAG }}"
+          body: "Automated release for environment: ${{ github.event.inputs.environment }}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Notify Webhook
         if: github.event.inputs.dry_run != 'true'
