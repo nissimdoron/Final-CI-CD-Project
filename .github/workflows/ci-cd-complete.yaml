@@ -50,7 +50,7 @@ jobs:
           docker stop test
 
 
-  Deploy Image:
+  Deploy-Image:
     runs-on: ubuntu-latest
     environment:
       name: ${{ github.event.inputs.environment }}
