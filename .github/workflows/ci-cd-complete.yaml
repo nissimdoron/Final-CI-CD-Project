@@ -70,7 +70,6 @@ jobs:
       - name: Create Git Tag
         if: github.event.inputs.dry_run != 'true'
         run: |
-          git config user.name "nissimdoron"
           git config user.email "nisko39@gmail.com"
           git tag ${{ env.IMAGE_TAG }}
           git push origin ${{ env.IMAGE_TAG }}
