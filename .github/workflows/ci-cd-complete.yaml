@@ -1,4 +1,4 @@
-nme: CI-CD - Matrix Build and Test with Deployment
+name: CI-CD - Matrix Build and Test with Deployment
 
 on:
   push:
