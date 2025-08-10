@@ -27,7 +27,17 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v3  
+
+      - name: Set DRY_RUN env variable
+        run: echo "DRY_RUN=${{ github.event.inputs.dry_run }}" >> $GITHUB_ENV
+
+      - name: Skip deployment if dry run
+        if: env.DRY_RUN == 'true'
+        run: echo "Skipping deployment (Dry run mode)"
+
+      - name: Proceed with deployment
+        if: env.DRY_RUN != 'true'
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
@@ -48,7 +58,7 @@ jobs:
           docker run -d -p 5050:80 --name test gamingecsite:${{ matrix.nginx_version }}
           sleep 1
           curl -f http://localhost:5050
-          docker stop test 
+          docker stop test
 
       - name: Build and Tag Image
         if: github.event.inputs.dry_run != 'true'
