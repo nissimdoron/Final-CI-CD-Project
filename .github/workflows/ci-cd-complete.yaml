@@ -35,7 +35,6 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-    steps:
       - name: Build Docker image with NGINX ${{ matrix.nginx_version }}
         run: |
           docker build \
