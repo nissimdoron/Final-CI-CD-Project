@@ -30,14 +30,6 @@ jobs:
 
     steps:
 
-      - name: Install dependencies
-        run: |
-          if [ -f package.json ]; then
-            npm ci
-          else
-            echo "No dependencies to install"
-          fi
-
       - name: Checkout code
         uses: actions/checkout@v3
         with:
