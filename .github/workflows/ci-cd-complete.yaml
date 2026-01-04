@@ -1,4 +1,4 @@
-name: CI-C - Matrix Build and Test with Deployment
+name: CI-CD - Matrix Build and Test with Deployment
 
 on:
   push:
@@ -72,8 +72,9 @@ jobs:
       
       - name: Install dependencies
         run: |
-          if [ -f package.json ]; then
+         if [ -f package.json ]; then
             npm ci
+         fi
 
       - name: Create Git Tag
         if: github.event.inputs.dry_run != 'true'
