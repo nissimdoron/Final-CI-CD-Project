@@ -81,8 +81,8 @@ jobs:
         run: |
           git config user.name "nissimdoron"
           git config user.email "nisko39@gmail.com"
-          git tag ${{ env.IMAGE_TAG }}
-          git push origin ${{ env.IMAGE_TAG }}
+          git tag -f ${{ env.IMAGE_TAG }}
+          git push origin ${{ env.IMAGE_TAG }} --force
 
       - name: Create GitHub Release
         if: github.event.inputs.dry_run != 'true'
