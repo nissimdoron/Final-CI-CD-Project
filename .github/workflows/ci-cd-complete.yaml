@@ -1,4 +1,4 @@
-name: CI-C - Matrix Build and Test with Deployment
+name: CI-CD - Matrix Build and Test with Deployment
 
 on:
   push:
@@ -72,16 +72,17 @@ jobs:
       
       - name: Install dependencies
         run: |
-          if [ -f package.json ]; then
+         if [ -f package.json ]; then
             npm ci
+         fi
 
       - name: Create Git Tag
         if: github.event.inputs.dry_run != 'true'
         run: |
           git config user.name "nissimdoron"
           git config user.email "nisko39@gmail.com"
-          git tag ${{ env.IMAGE_TAG }}
-          git push origin ${{ env.IMAGE_TAG }}
+          git tag -f ${{ env.IMAGE_TAG }}
+          git push origin ${{ env.IMAGE_TAG }} --force
 
       - name: Create GitHub Release
         if: github.event.inputs.dry_run != 'true'
